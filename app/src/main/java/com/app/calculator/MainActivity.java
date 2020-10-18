@@ -131,7 +131,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
             Expression expression = new Expression(exp + "/100");
-            resultTxtView.setText(String.valueOf(expression.calculate()));
+            String result = String.valueOf(expression.calculate());
+            expTxtView.setText(result);
+            resultTxtView.setText(result);
         } else if (R.id.dot == id) {
             generateExpression(".");
         }
@@ -141,13 +143,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void calculate() {
         String exp = expTxtView.getText().toString();
         String result;
-        if (!exp.equals("") && !exp.equals(".") && !exp.equals("0")) {
-            expTxtView.setText("");
-            Expression expression = new Expression(exp);
-            result = String.valueOf(expression.calculate());
-            resultTxtView.setText(result);
-            expTxtView.setText(result);
+        if (exp.equals("") || exp.equals(".") || isSpecialChar("" + exp.charAt(exp.length() - 1))) {
+            return;
         }
+        expTxtView.setText("");
+        Expression expression = new Expression(exp);
+        result = String.valueOf(expression.calculate());
+        resultTxtView.setText(result);
+        expTxtView.setText(result);
     }
 
     public void generateExpression(String val) {
