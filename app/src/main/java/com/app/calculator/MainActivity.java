@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.mariuszgromada.math.mxparser.Expression;
 
+import java.util.regex.Pattern;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button zeroBtn, oneBtn, twoBtn, threeBtn, fourBtn, fiveBtn, sixBtn, sevenBtn, eightBtn, nineBtn;
@@ -104,10 +106,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (R.id.multiply == id) {
             generateExpression("*");
         } else if (R.id.mul100times == id) {
-            Expression expression = new Expression(exp + "*100");
-            String result = String.valueOf(expression.calculate());
-            resultTxtView.setText(result);
-            expTxtView.setText(result);
+            if (!exp.equals("")) {
+                Expression expression = new Expression(exp + "*100");
+                String result = String.valueOf(expression.calculate());
+                resultTxtView.setText(result);
+                expTxtView.setText(result);
+            }
         } else if (R.id.divide == id) {
             generateExpression("/");
         } else if (R.id.clear == id) {
@@ -123,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         } else if (R.id.percentage == id) {
+            if (exp.equals("") || isSpecialChar("" + exp.charAt(exp.length() - 1))) {
+                return;
+            }
             Expression expression = new Expression(exp + "/100");
             resultTxtView.setText(String.valueOf(expression.calculate()));
         } else if (R.id.dot == id) {
@@ -144,6 +151,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void generateExpression(String val) {
+        String exp = expTxtView.getText().toString();
+        if (isSpecialChar(val)) {
+            if (exp.equals("") || isSpecialChar("" + exp.charAt(exp.length() - 1))) {
+                return;
+            }
+        }
         expTxtView.setText(String.format("%s%s", expTxtView.getText().toString(), val));
+    }
+
+    public boolean isSpecialChar(String str) {
+        return Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]").matcher(str).find();
     }
 }
