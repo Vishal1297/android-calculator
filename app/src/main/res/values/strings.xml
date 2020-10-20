@@ -23,5 +23,8 @@
     <string name="zeroNum">0</string>
     <string name="dotSymbol">.</string>
     <string name="equalsSymbol">=</string>
+    <string name="about">About</string>
+    <string name="feedback">Feedback</string>
+    <string name="exit">Exit</string>
 
 </resources>

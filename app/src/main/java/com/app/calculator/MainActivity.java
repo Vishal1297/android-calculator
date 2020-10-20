@@ -1,10 +1,16 @@
 package com.app.calculator;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.mariuszgromada.math.mxparser.Expression;
@@ -135,9 +141,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             expTxtView.setText(result);
             resultTxtView.setText(result);
         } else if (R.id.dot == id) {
-            generateExpression(".");
+            if (!Double.isNaN(new Expression(exp + ".0").calculate())) generateExpression(".");
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Are you sure ?")
+                .setMessage("You want to exit ?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", null).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        super.onOptionsItemSelected(item);
+        int menuItemId = item.getItemId();
+        if (menuItemId == R.id.aboutItem) {
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setTitle("About")
+                    .setMessage("A Simple Calculator\nBy Vishal")
+                    .setPositiveButton("Ok", null).show();
+            return true;
+        } else if (menuItemId == R.id.exitItem) {
+            onBackPressed();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void calculate() {
