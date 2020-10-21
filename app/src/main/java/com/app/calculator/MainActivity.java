@@ -193,11 +193,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (exp.equals("") || exp.equals(".") || isSpecialChar("" + exp.charAt(exp.length() - 1))) {
             return;
         }
-        expTxtView.setText("");
         Expression expression = new Expression(exp);
         result = String.valueOf(expression.calculate());
         resultTxtView.setText(result);
-        expTxtView.setText(result);
     }
 
     public void generateExpression(String val) {
